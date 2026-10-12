@@ -1,0 +1,4 @@
+plugins { id 'com.android.application' }
+android { namespace 'com.sofiadibuja.app'; compileSdk 35
+ defaultConfig { applicationId 'com.sofiadibuja.app'; minSdk 23; targetSdk 33; versionCode 1; versionName '0.1' }
+}

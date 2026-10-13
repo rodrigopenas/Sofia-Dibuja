@@ -39,38 +39,86 @@ public class MainActivity extends Activity {
     voz=new TextToSpeech(this,s->{if(s==TextToSpeech.SUCCESS){voz.setLanguage(new Locale("es","AR"));voz.setSpeechRate(0.85f);}});
     menu();
   }
-  Button boton(String texto){Button b=new Button(this);b.setText(texto);b.setAllCaps(false);return b;}
-  void base(){raiz=new LinearLayout(this);raiz.setOrientation(LinearLayout.VERTICAL);raiz.setPadding(14,16,14,12);raiz.setBackgroundColor(Color.rgb(250,248,242));setContentView(raiz);}
+  int ink=Color.rgb(40,53,78), coral=Color.rgb(235,111,100), paper=Color.rgb(255,250,241);
+  int dp(float n){return (int)(getResources().getDisplayMetrics().density*n+0.5f);}
+  android.graphics.drawable.GradientDrawable bg(int color,int radius){
+    android.graphics.drawable.GradientDrawable d=new android.graphics.drawable.GradientDrawable();
+    d.setColor(color);d.setCornerRadius(dp(radius));return d;
+  }
+  TextView text(String value,int size,int color){
+    TextView t=new TextView(this);t.setText(value);t.setTextSize(size);t.setTextColor(color);return t;
+  }
+  TextView action(String label,int color){
+    TextView t=text(label,16,Color.WHITE);t.setGravity(Gravity.CENTER);
+    t.setTypeface(null,1);t.setBackground(bg(color,18));t.setPadding(dp(9),dp(14),dp(9),dp(14));return t;
+  }
+  void base(){raiz=new LinearLayout(this);raiz.setOrientation(1);raiz.setPadding(dp(16),dp(16),dp(16),dp(16));raiz.setBackgroundColor(paper);setContentView(raiz);}
   void menu(){
     elegido=-1;paso=0;if(voz!=null)voz.stop();base();
-    TextView encabezado=new TextView(this);encabezado.setText("Sofía Dibuja\nElegí qué querés dibujar");encabezado.setTextSize(25);encabezado.setTextColor(Color.rgb(36,65,85));encabezado.setGravity(Gravity.CENTER);encabezado.setPadding(4,8,4,16);raiz.addView(encabezado);
-    ScrollView scroll=new ScrollView(this);raiz.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));
-    LinearLayout lista=new LinearLayout(this);lista.setOrientation(LinearLayout.VERTICAL);scroll.addView(lista);
-    String ultima="";
+    TextView brand=text("✏  SOFÍA DIBUJA",28,ink);brand.setTypeface(null,1);raiz.addView(brand);
+    TextView sub=text("Tu pequeño taller de arte",17,coral);sub.setPadding(0,dp(3),0,dp(10));raiz.addView(sub);
+    TextView tip=text("Prepará lápiz y papel. Elegí un dibujo y seguí los pasos en tu hoja.",15,ink);
+    tip.setPadding(dp(15),dp(13),dp(15),dp(13));tip.setBackground(bg(Color.WHITE,18));raiz.addView(tip);
+    ScrollView scroll=new ScrollView(this);scroll.setFillViewport(false);
+    raiz.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));
+    LinearLayout list=new LinearLayout(this);list.setOrientation(1);list.setPadding(0,dp(6),0,dp(12));scroll.addView(list);
+    String previous="";
+    LinearLayout row=null;
     for(int i=0;i<nombres.length;i++){
-      if(!categorias[i].equals(ultima)){ultima=categorias[i];TextView sec=new TextView(this);sec.setText(ultima);sec.setTextSize(21);sec.setTextColor(Color.rgb(42,83,106));sec.setPadding(6,18,6,6);lista.addView(sec);}
-      final int indice=i;Button b=boton(nombres[i]);lista.addView(b);b.setOnClickListener(v->{elegido=indice;paso=0;leccion();});
+      if(!categorias[i].equals(previous)){
+        previous=categorias[i];TextView section=text(previous.toUpperCase(new Locale("es","AR")),17,ink);
+        section.setTypeface(null,1);section.setPadding(dp(3),dp(19),0,dp(9));list.addView(section);
+      }
+      if(i==0||!categorias[i].equals(categorias[i-1])||row==null){
+        row=new LinearLayout(this);row.setOrientation(0);list.addView(row);
+      }
+      final int index=i;
+      LinearLayout card=new LinearLayout(this);card.setOrientation(1);card.setGravity(Gravity.CENTER);
+      card.setPadding(dp(7),dp(7),dp(7),dp(10));card.setBackground(bg(Color.WHITE,18));
+      LinearLayout.LayoutParams cp=new LinearLayout.LayoutParams(0,dp(154),1);
+      cp.setMargins(dp(3),dp(4),dp(3),dp(4));row.addView(card,cp);
+      Drawing thumb=new Drawing(this,index,true);card.addView(thumb,new LinearLayout.LayoutParams(-1,dp(105)));
+      TextView label=text(nombres[i],16,ink);label.setTypeface(null,1);label.setGravity(Gravity.CENTER);card.addView(label);
+      card.setOnClickListener(v->{elegido=index;paso=0;leccion();hablar();});
+      if(row.getChildCount()==2)row=null;
     }
-    TextView nota=new TextView(this);nota.setText("Prepará una hoja y un lápiz. La pantalla te muestra cada paso.");nota.setTextSize(15);nota.setGravity(Gravity.CENTER);raiz.addView(nota);
   }
   void leccion(){
-    base();Button volver=boton("‹ Volver a dibujos");raiz.addView(volver);volver.setOnClickListener(v->menu());
-    titulo=new TextView(this);titulo.setTextSize(22);titulo.setTextColor(Color.rgb(35,48,65));titulo.setGravity(Gravity.CENTER);raiz.addView(titulo);
-    dibujo=new Drawing(this);raiz.addView(dibujo,new LinearLayout.LayoutParams(-1,0,1));
-    instruccion=new TextView(this);instruccion.setTextSize(19);instruccion.setTextColor(Color.BLACK);instruccion.setPadding(8,12,8,12);raiz.addView(instruccion);
-    LinearLayout botones=new LinearLayout(this);botones.setOrientation(LinearLayout.HORIZONTAL);raiz.addView(botones);
-    Button anterior=boton("Anterior"),escuchar=boton("Escuchar"),siguiente=boton("Siguiente");
-    botones.addView(anterior,new LinearLayout.LayoutParams(0,-2,1));botones.addView(escuchar,new LinearLayout.LayoutParams(0,-2,1));botones.addView(siguiente,new LinearLayout.LayoutParams(0,-2,1));
-    anterior.setOnClickListener(v->{if(paso>0)paso--;actualizar();hablar();});
-    siguiente.setOnClickListener(v->{if(paso<5){paso++;actualizar();hablar();}else menu();});
-    escuchar.setOnClickListener(v->hablar());actualizar();
+    base();
+    TextView back=text("‹  Todos los dibujos",16,coral);back.setTypeface(null,1);
+    back.setPadding(dp(2),dp(5),0,dp(12));raiz.addView(back);back.setOnClickListener(v->menu());
+    titulo=text("",25,ink);titulo.setTypeface(null,1);raiz.addView(titulo);
+    TextView hint=text("Mirá el ejemplo y dibujalo en tu papel",14,coral);
+    hint.setPadding(0,dp(3),0,dp(12));raiz.addView(hint);
+    android.widget.FrameLayout panel=new android.widget.FrameLayout(this);panel.setBackground(bg(Color.WHITE,24));
+    raiz.addView(panel,new LinearLayout.LayoutParams(-1,0,1));
+    dibujo=new Drawing(this);panel.addView(dibujo,new android.widget.FrameLayout.LayoutParams(-1,-1));
+    instruccion=text("",18,ink);instruccion.setGravity(Gravity.CENTER);
+    instruccion.setBackground(bg(Color.WHITE,18));instruccion.setPadding(dp(14),dp(17),dp(14),dp(17));
+    LinearLayout.LayoutParams ip=new LinearLayout.LayoutParams(-1,-2);ip.setMargins(0,dp(12),0,dp(12));raiz.addView(instruccion,ip);
+    LinearLayout controls=new LinearLayout(this);controls.setOrientation(0);raiz.addView(controls);
+    TextView prev=action("‹ Anterior",ink),speak=action("♫ Escuchar",coral),next=action("Siguiente ›",ink);
+    for(TextView t:new TextView[]{prev,speak,next}){
+      LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(0,-2,1);p.setMargins(dp(2),0,dp(2),0);controls.addView(t,p);
+    }
+    prev.setOnClickListener(v->{if(paso>0){paso--;actualizar();hablar();}});
+    speak.setOnClickListener(v->hablar());
+    next.setOnClickListener(v->{if(paso<5){paso++;actualizar();hablar();}else menu();});
+    actualizar();
   }
-  void actualizar(){titulo.setText(nombres[elegido]+" · Paso "+(paso+1)+" de 6");instruccion.setText(frases[elegido][paso]);dibujo.invalidate();}
+  void actualizar(){titulo.setText(nombres[elegido]+"   ·   "+(paso+1)+" / 6");instruccion.setText(frases[elegido][paso]);dibujo.invalidate();}
   void hablar(){if(voz!=null&&elegido>=0)voz.speak(frases[elegido][paso],TextToSpeech.QUEUE_FLUSH,null,"paso");}
+  @Override public void onBackPressed(){if(elegido>=0)menu();else super.onBackPressed();}
   @Override protected void onDestroy(){if(voz!=null){voz.stop();voz.shutdown();}super.onDestroy();}
   class Drawing extends View {
     Paint p=new Paint(3);
-    Drawing(Context c){super(c);setBackgroundColor(Color.WHITE);p.setColor(Color.rgb(39,77,108));p.setStrokeWidth(4);p.setStyle(Paint.Style.STROKE);p.setStrokeCap(Paint.Cap.ROUND);p.setStrokeJoin(Paint.Join.ROUND);}
+    int subject=-1;boolean preview=false;
+    Drawing(Context c){this(c,-1,false);}
+    Drawing(Context c,int index,boolean mini){
+      super(c);subject=index;preview=mini;setLayerType(View.LAYER_TYPE_SOFTWARE,null);
+      p.setColor(ink);p.setStrokeWidth(4.5f);p.setStyle(Paint.Style.STROKE);
+      p.setStrokeCap(Paint.Cap.ROUND);p.setStrokeJoin(Paint.Join.ROUND);
+    }
     void line(Canvas c,float... a){Path q=new Path();q.moveTo(a[0],a[1]);for(int i=2;i<a.length;i+=2)q.lineTo(a[i],a[i+1]);c.drawPath(q,p);}
     void oval(Canvas c,float a,float b,float d,float e){c.drawOval(a,b,d,e,p);}
     void circle(Canvas c,float x,float y,float r){c.drawCircle(x,y,r,p);}
@@ -109,6 +157,17 @@ public class MainActivity extends Activity {
         rect(c,145,37,255,139);if(s>=1)rect(c,125,142,275,250);if(s>=2){line(c,125,167,72,187,72,242);line(c,275,167,328,187,328,242);}if(s>=3){line(c,161,250,161,307);line(c,239,250,239,307);}if(s>=4){circle(c,175,83,12);circle(c,225,83,12);line(c,175,112,225,112);}if(s>=5){circle(c,180,190,10);circle(c,220,190,10);line(c,200,37,200,13);circle(c,200,12,5);}break;
       }
     }
-    @Override protected void onDraw(Canvas c){super.onDraw(c);if(elegido<0)return;int save=c.save();float scale=Math.min(getWidth()/400f,getHeight()/330f);c.translate((getWidth()-400*scale)/2,(getHeight()-330*scale)/2);c.scale(scale,scale);drawStep(c,elegido,paso);c.restoreToCount(save);}
+    @Override protected void onDraw(Canvas c){
+      super.onDraw(c);int index=subject>=0?subject:elegido;if(index<0)return;
+      int save=c.save();float scale=Math.min(getWidth()/430f,getHeight()/350f);
+      c.translate((getWidth()-400*scale)/2,(getHeight()-330*scale)/2);c.scale(scale,scale);
+      p.setStrokeWidth(preview?6:4.5f);
+      if(preview){p.setColor(ink);drawStep(c,index,5);}
+      else {
+        if(paso>0){p.setColor(Color.rgb(195,203,210));drawStep(c,index,paso-1);}
+        p.setColor(coral);drawStep(c,index,paso);
+      }
+      c.restoreToCount(save);
+    }
   }
 }

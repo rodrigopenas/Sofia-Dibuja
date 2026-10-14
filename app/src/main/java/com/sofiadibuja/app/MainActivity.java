@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
     {"Dibujá un círculo para la cabeza.","Agregá dos orejas caídas.","Dibujá dos ojos.","Poné una nariz y una boca.","Dibujá un cuerpo ovalado.","Agregá cuatro patas y una cola."},
     {"Dibujá un cuerpo largo y finito en el centro.","Sumá las dos alas superiores.","Agregá las dos alas inferiores.","Dibujá una cabeza redonda.","Poné dos antenas.","Decorá las alas con círculos."},
     {"Dibujá un óvalo grande para el cuerpo.","Agregá el cuello y la cabeza.","Dibujá dos orejas y un ojo.","Sumá las cuatro patas.","Dibujá una cola larga.","Agregá la crin y los cascos."},
-    {"Dibujá dos líneas para el tronco.","Uní las líneas abajo con una base.","Agregá una copa grande y redonda.","Dibujá dos ramas dentro de la copa.","Sumá hojas con círculos pequeños.","Dibujá el suelo debajo del árbol."},
+    {"Dibujá la primera línea vertical del tronco.","Dibujá la segunda línea vertical y unilas arriba para formar el tronco.","Agregá una copa grande y redonda.","Dibujá dos ramas dentro de la copa.","Sumá hojas con círculos pequeños.","Dibujá el suelo debajo del árbol."},
     {"Dibujá un círculo para el centro de la flor.","Agregá pétalos alrededor.","Dibujá un tallo hacia abajo.","Sumá una hoja a la izquierda.","Agregá otra hoja a la derecha.","Dibujá pastito en la base."},
     {"Dibujá una línea horizontal para el suelo.","Dibujá una montaña triangular.","Agregá otra montaña al lado.","Dibujá nieve en las cumbres.","Sumá un sol redondo.","Agregá algunas nubes."},
     {"Dibujá una línea de horizonte.","Agregá dos montañas al fondo.","Dibujá un sol arriba.","Sumá un árbol a la izquierda.","Dibujá un camino curvo.","Agregá nubes y pastito."},
@@ -136,7 +136,7 @@ public class MainActivity extends Activity {
       "Compará tamaños y posiciones antes de marcar los trazos.",
       "Agregá líneas curvas para dar una apariencia más natural.",
       "Probá sumar pequeños detalles que hagan reconocible el dibujo.",
-      "Dale profundidad con sombras suaves en uno de los costados."
+      "Al final, agregá una línea de suelo y cuatro pequeñas marcas de textura debajo del dibujo."
     };
     String[] avanzado={
       "Empezá con trazos suaves de construcción y cuidá la composición.",
@@ -144,7 +144,7 @@ public class MainActivity extends Activity {
       "Buscá simetría o asimetría natural según el objeto.",
       "Variá la presión del lápiz para diferenciar contornos y detalles.",
       "Definí una dirección de luz y reservá las zonas iluminadas.",
-      "Terminá con luces, sombras, texturas y un fondo sencillo."
+      "Terminá con una línea de suelo, pequeñas marcas de textura y líneas diagonales de sombra."
     };
     return base+" "+(dificultad==1?intermedio[paso]:avanzado[paso]);
   }
@@ -186,6 +186,20 @@ public class MainActivity extends Activity {
     void oval(Canvas c,float a,float b,float d,float e){c.drawOval(a,b,d,e,p);}
     void circle(Canvas c,float x,float y,float r){c.drawCircle(x,y,r,p);}
     void rect(Canvas c,float a,float b,float d,float e){c.drawRect(a,b,d,e,p);}
+    void detallesNivel(Canvas c,int n,int s){
+      if(preview || dificultad==0 || s<5)return;
+      int old=p.getColor();float oldWidth=p.getStrokeWidth();
+      p.setColor(Color.rgb(118,136,153));p.setStrokeWidth(2.2f);
+      // Intermedio: línea de suelo y textura breve en el dibujo terminado.
+      line(c,45,315,355,315);
+      for(int i=0;i<4;i++)line(c,70+i*74,312,78+i*74,305);
+      if(dificultad==2){
+        // Avanzado: rayado de sombra visible, sin tapar el modelo original.
+        for(int i=0;i<7;i++)line(c,265+i*9,267,249+i*9,290);
+        for(int i=0;i<4;i++)line(c,75+i*12,280,64+i*12,297);
+      }
+      p.setColor(old);p.setStrokeWidth(oldWidth);
+    }
     void drawStep(Canvas c,int n,int s){
       switch(n){
       case 0:
@@ -234,7 +248,7 @@ public class MainActivity extends Activity {
       if(preview){p.setColor(ink);drawStep(c,index,5);}
       else {
         if(paso>0){p.setColor(Color.rgb(195,203,210));drawStep(c,index,paso-1);}
-        p.setColor(coral);drawStep(c,index,paso);
+        p.setColor(coral);drawStep(c,index,paso);detallesNivel(c,index,paso);
       }
       c.restoreToCount(save);
     }

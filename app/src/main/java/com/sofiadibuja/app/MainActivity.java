@@ -1,6 +1,7 @@
 package com.sofiadibuja.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.graphics.*;
@@ -11,7 +12,9 @@ import java.util.*;
 
 public class MainActivity extends Activity {
   TextToSpeech voz;
-  int paso=0, elegido=-1;
+  int paso=0, elegido=-1, dificultad=0;
+  float volumenVoz=0.55f, tonoVoz=0.85f;
+  android.content.SharedPreferences prefs;
   LinearLayout raiz;
   TextView titulo, instruccion;
   Drawing dibujo;
@@ -36,7 +39,10 @@ public class MainActivity extends Activity {
   };
   @Override public void onCreate(Bundle b) {
     super.onCreate(b);
-    voz=new TextToSpeech(this,s->{if(s==TextToSpeech.SUCCESS){voz.setLanguage(new Locale("es","AR"));voz.setSpeechRate(0.85f);}});
+    prefs=getSharedPreferences("sofia_config",MODE_PRIVATE);
+    volumenVoz=prefs.getFloat("volumen",0.55f);
+    tonoVoz=prefs.getFloat("tono",0.85f);
+    voz=new TextToSpeech(this,s->{if(s==TextToSpeech.SUCCESS){voz.setLanguage(new Locale("es","AR"));voz.setSpeechRate(0.90f);voz.setPitch(tonoVoz);}});
     menu();
   }
   int ink=Color.rgb(40,53,78), coral=Color.rgb(235,111,100), paper=Color.rgb(255,250,241);
@@ -59,6 +65,18 @@ public class MainActivity extends Activity {
     TextView sub=text("Tu pequeño taller de arte",17,coral);sub.setPadding(0,dp(3),0,dp(10));raiz.addView(sub);
     TextView tip=text("Prepará lápiz y papel. Elegí un dibujo y seguí los pasos en tu hoja.",15,ink);
     tip.setPadding(dp(15),dp(13),dp(15),dp(13));tip.setBackground(bg(Color.WHITE,18));raiz.addView(tip);
+    TextView settings=action("♫ Ajustar voz y volumen",ink);raiz.addView(settings);
+    settings.setOnClickListener(v->ajustarVoz());
+    TextView levelLabel=text("Dificultad",17,ink);levelLabel.setPadding(0,dp(10),0,0);raiz.addView(levelLabel);
+    Spinner levels=new Spinner(this);
+    String[] opciones={"Inicial · figuras simples","Intermedio · más detalles","Avanzado · dibujo expresivo"};
+    levels.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,opciones));
+    levels.setSelection(dificultad);
+    levels.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener(){
+      public void onNothingSelected(android.widget.AdapterView<?> parent){}
+      public void onItemSelected(android.widget.AdapterView<?> parent,View view,int position,long id){dificultad=position;}
+    });
+    raiz.addView(levels);
     ScrollView scroll=new ScrollView(this);scroll.setFillViewport(false);
     raiz.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));
     LinearLayout list=new LinearLayout(this);list.setOrientation(1);list.setPadding(0,dp(6),0,dp(12));scroll.addView(list);
@@ -88,7 +106,7 @@ public class MainActivity extends Activity {
     TextView back=text("‹  Todos los dibujos",16,coral);back.setTypeface(null,1);
     back.setPadding(dp(2),dp(5),0,dp(12));raiz.addView(back);back.setOnClickListener(v->menu());
     titulo=text("",25,ink);titulo.setTypeface(null,1);raiz.addView(titulo);
-    TextView hint=text("Mirá el ejemplo y dibujalo en tu papel",14,coral);
+    TextView hint=text("Mirá el ejemplo y dibujalo en tu papel · "+new String[]{"Inicial","Intermedio","Avanzado"}[dificultad],14,coral);
     hint.setPadding(0,dp(3),0,dp(12));raiz.addView(hint);
     android.widget.FrameLayout panel=new android.widget.FrameLayout(this);panel.setBackground(bg(Color.WHITE,24));
     raiz.addView(panel,new LinearLayout.LayoutParams(-1,0,1));
@@ -106,8 +124,50 @@ public class MainActivity extends Activity {
     next.setOnClickListener(v->{if(paso<5){paso++;actualizar();hablar();}else menu();});
     actualizar();
   }
-  void actualizar(){titulo.setText(nombres[elegido]+"   ·   "+(paso+1)+" / 6");instruccion.setText(frases[elegido][paso]);dibujo.invalidate();}
-  void hablar(){if(voz!=null&&elegido>=0)voz.speak(frases[elegido][paso],TextToSpeech.QUEUE_FLUSH,null,"paso");}
+  String fraseActual(){
+    String base=frases[elegido][paso];
+    if(dificultad==0)return base;
+    String[] intermedio={
+      "Prestá atención a las proporciones y dejá espacio para agregar detalles.",
+      "Buscá que las líneas se unan suavemente, sin apretar mucho el lápiz.",
+      "Compará tamaños y posiciones antes de marcar los trazos.",
+      "Agregá líneas curvas para dar una apariencia más natural.",
+      "Probá sumar pequeños detalles que hagan reconocible el dibujo.",
+      "Dale profundidad con sombras suaves en uno de los costados."
+    };
+    String[] avanzado={
+      "Empezá con trazos suaves de construcción y cuidá la composición.",
+      "Pensá en el volumen y la perspectiva mientras completás la forma.",
+      "Buscá simetría o asimetría natural según el objeto.",
+      "Variá la presión del lápiz para diferenciar contornos y detalles.",
+      "Definí una dirección de luz y reservá las zonas iluminadas.",
+      "Terminá con luces, sombras, texturas y un fondo sencillo."
+    };
+    return base+" "+(dificultad==1?intermedio[paso]:avanzado[paso]);
+  }
+  void actualizar(){titulo.setText(nombres[elegido]+"   ·   "+(paso+1)+" / 6");instruccion.setText(fraseActual());dibujo.invalidate();}
+  void hablar(){
+    if(voz!=null&&elegido>=0){
+      Bundle opciones=new Bundle();
+      opciones.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME,volumenVoz);
+      voz.speak(fraseActual(),TextToSpeech.QUEUE_FLUSH,opciones,"paso");
+    }
+  }
+  void ajustarVoz(){
+    LinearLayout panel=new LinearLayout(this);panel.setOrientation(1);panel.setPadding(dp(20),dp(12),dp(20),dp(8));
+    TextView info=text("Ajustá la voz para que resulte suave y agradable. El volumen de esta app es independiente del volumen general.",16,ink);panel.addView(info);
+    TextView vl=text("Volumen de la voz",17,ink);panel.addView(vl);
+    SeekBar vol=new SeekBar(this);vol.setMax(100);vol.setProgress(Math.round(volumenVoz*100));panel.addView(vol);
+    TextView pitch=text("Tono de la voz",17,ink);panel.addView(pitch);
+    SeekBar tono=new SeekBar(this);tono.setMax(100);tono.setProgress(Math.round((tonoVoz-0.65f)*100/0.55f));panel.addView(tono);
+    new AlertDialog.Builder(this).setTitle("Configurar voz").setView(panel)
+      .setPositiveButton("Guardar",(d,w)->{
+        volumenVoz=Math.max(0.1f,vol.getProgress()/100f);
+        tonoVoz=0.65f+tono.getProgress()*0.55f/100f;
+        prefs.edit().putFloat("volumen",volumenVoz).putFloat("tono",tonoVoz).apply();
+        if(voz!=null)voz.setPitch(tonoVoz);
+      }).setNegativeButton("Cancelar",null).show();
+  }
   @Override public void onBackPressed(){if(elegido>=0)menu();else super.onBackPressed();}
   @Override protected void onDestroy(){if(voz!=null){voz.stop();voz.shutdown();}super.onDestroy();}
   class Drawing extends View {

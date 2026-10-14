@@ -18,8 +18,8 @@ public class MainActivity extends Activity {
   LinearLayout raiz;
   TextView titulo, instruccion;
   Drawing dibujo;
-  final String[] nombres={"Pez","Gato","Perro","Mariposa","Caballo","Árbol","Flor","Montañas","Paisaje","Casa","Auto","Bicicleta","Cara","Persona","Robot"};
-  final String[] categorias={"Animales","Animales","Animales","Animales","Animales","Naturaleza","Naturaleza","Naturaleza","Naturaleza","Objetos","Objetos","Objetos","Personajes","Personajes","Personajes"};
+  final String[] nombres={"Pez","Gato","Perro","Mariposa","Caballo","Árbol","Flor","Montañas","Paisaje","Casa","Auto","Bicicleta","Cara","Persona","Robot","Cohete","Castillo","Dinosaurio"};
+  final String[] categorias={"Animales","Animales","Animales","Animales","Animales","Naturaleza","Naturaleza","Naturaleza","Naturaleza","Objetos","Objetos","Objetos","Personajes","Personajes","Personajes","Aventura","Aventura","Aventura"};
   final String[][] frases={
     {"Dibujá un óvalo grande en el centro de la hoja.","Agregá una cola triangular a la derecha.","Poné un ojo redondo a la izquierda.","Dibujá una boca pequeña.","Sumá una aleta arriba y otra abajo.","Terminá con líneas en la cola. ¡Muy bien!"},
     {"Dibujá un círculo grande para la cabeza.","Agregá dos orejas triangulares.","Dibujá dos ojos redondos.","Poné una nariz triangular y una boca.","Sumá bigotes a los costados.","Dibujá el cuerpo y una cola curva."},
@@ -35,7 +35,10 @@ public class MainActivity extends Activity {
     {"Dibujá dos ruedas grandes.","Uní las ruedas con el cuadro triangular.","Agregá el manubrio.","Dibujá el asiento.","Sumá los pedales.","Agregá los rayos de las ruedas."},
     {"Dibujá un óvalo para la cara.","Agregá dos ojos.","Dibujá una nariz pequeña.","Sumá una boca sonriente.","Agregá dos orejas.","Dibujá el pelo."},
     {"Dibujá un círculo para la cabeza.","Agregá una línea para el cuerpo.","Dibujá dos brazos.","Sumá dos piernas.","Agregá manos y pies.","Dibujá ojos, nariz y boca."},
-    {"Dibujá un cuadrado para la cabeza del robot.","Agregá un rectángulo para el cuerpo.","Dibujá dos brazos.","Sumá dos piernas.","Agregá ojos y una boca.","Dibujá botones y una antena."}
+    {"Dibujá un cuadrado para la cabeza del robot.","Agregá un rectángulo para el cuerpo.","Dibujá dos brazos.","Sumá dos piernas.","Agregá ojos y una boca.","Dibujá botones y una antena."},
+    {"Dibujá un rectángulo alto para el cuerpo del cohete.","Agregá una punta triangular.","Dibujá dos ventanas circulares.","Sumá dos aletas laterales.","Dibujá las llamas de los motores.","Agregá estrellas y un planeta de fondo."},
+    {"Dibujá un rectángulo ancho para la muralla del castillo.","Agregá dos torres altas a los costados.","Dibujá los techos puntiagudos de las torres.","Sumá una puerta grande con arco.","Agregá ventanas y almenas.","Dibujá piedras, un camino y una bandera."},
+    {"Dibujá un óvalo grande para el cuerpo del dinosaurio.","Agregá un cuello largo que termine en una cabeza.","Dibujá una cola larga y curva.","Sumá cuatro patas fuertes.","Agregá un ojo y una boca sonriente.","Dibujá manchas, pasto y montañas de fondo."}
   };
   @Override public void onCreate(Bundle b) {
     super.onCreate(b);
@@ -213,6 +216,12 @@ public class MainActivity extends Activity {
         oval(c,113,38,287,281);if(s>=1){circle(c,165,139,10);circle(c,235,139,10);}if(s>=2)line(c,200,151,187,192,213,192);if(s>=3)line(c,165,221,200,239,235,221);if(s>=4){oval(c,96,154,115,190);oval(c,285,154,304,190);}if(s>=5)line(c,118,95,151,49,200,39,249,49,282,95);break;
       case 13:
         circle(c,200,65,34);if(s>=1)line(c,200,99,200,218);if(s>=2){line(c,200,126,123,182);line(c,200,126,277,182);}if(s>=3){line(c,200,218,141,298);line(c,200,218,259,298);}if(s>=4){circle(c,123,182,9);circle(c,277,182,9);oval(c,127,294,157,308);oval(c,244,294,274,308);}if(s>=5){circle(c,188,61,3);circle(c,212,61,3);line(c,190,78,200,83,210,78);}break;
+      case 15:
+        rect(c,157,100,243,248);if(s>=1)line(c,157,100,200,30,243,100);if(s>=2){circle(c,200,145,20);circle(c,200,207,14);}if(s>=3){line(c,157,188,120,246,157,246);line(c,243,188,280,246,243,246);}if(s>=4){line(c,173,248,163,304,200,273,237,304,227,248);}if(s>=5){circle(c,75,75,18);circle(c,315,62,22);line(c,300,168,310,183,320,168);}break;
+      case 16:
+        rect(c,100,132,300,292);if(s>=1){rect(c,60,91,114,292);rect(c,286,91,340,292);}if(s>=2){line(c,55,91,87,38,119,91);line(c,281,91,313,38,345,91);}if(s>=3){line(c,169,292,169,235,200,203,231,235,231,292);}if(s>=4){rect(c,74,143,100,177);rect(c,300,143,326,177);line(c,120,132,120,111,143,111,143,132);line(c,257,132,257,111,280,111,280,132);}if(s>=5){line(c,313,38,313,10,347,21,313,31);line(c,30,307,370,307);line(c,135,165,157,165);}break;
+      case 17:
+        oval(c,95,146,286,247);if(s>=1){line(c,243,159,265,77,312,63,335,89,323,112,278,111);}if(s>=2){line(c,98,177,48,132,20,161,94,223);}if(s>=3){line(c,132,233,127,298,154,298,167,241);line(c,230,235,227,298,254,298,265,229);}if(s>=4){circle(c,309,85,5);line(c,315,105,327,108);}if(s>=5){circle(c,158,180,12);circle(c,212,204,15);line(c,35,307,365,307);line(c,35,108,95,73,145,108);}break;
       case 14:
         rect(c,145,37,255,139);if(s>=1)rect(c,125,142,275,250);if(s>=2){line(c,125,167,72,187,72,242);line(c,275,167,328,187,328,242);}if(s>=3){line(c,161,250,161,307);line(c,239,250,239,307);}if(s>=4){circle(c,175,83,12);circle(c,225,83,12);line(c,175,112,225,112);}if(s>=5){circle(c,180,190,10);circle(c,220,190,10);line(c,200,37,200,13);circle(c,200,12,5);}break;
       }

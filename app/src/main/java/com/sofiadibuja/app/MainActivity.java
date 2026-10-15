@@ -136,7 +136,7 @@ public class MainActivity extends Activity {
       "Compará tamaños y posiciones antes de marcar los trazos.",
       "Agregá líneas curvas para dar una apariencia más natural.",
       "Probá sumar pequeños detalles que hagan reconocible el dibujo.",
-      "Al final, agregá una línea de suelo y cuatro pequeñas marcas de textura debajo del dibujo."
+      "Completá los detalles de la figura y repasá los trazos principales."
     };
     String[] avanzado={
       "Empezá con trazos suaves de construcción y cuidá la composición.",
@@ -144,7 +144,7 @@ public class MainActivity extends Activity {
       "Buscá simetría o asimetría natural según el objeto.",
       "Variá la presión del lápiz para diferenciar contornos y detalles.",
       "Definí una dirección de luz y reservá las zonas iluminadas.",
-      "Terminá con una línea de suelo, pequeñas marcas de textura y líneas diagonales de sombra."
+      "Completá los detalles y sumá líneas finas de sombra en un costado."
     };
     return base+" "+(dificultad==1?intermedio[paso]:avanzado[paso]);
   }
@@ -187,17 +187,121 @@ public class MainActivity extends Activity {
     void circle(Canvas c,float x,float y,float r){c.drawCircle(x,y,r,p);}
     void rect(Canvas c,float a,float b,float d,float e){c.drawRect(a,b,d,e,p);}
     void detallesNivel(Canvas c,int n,int s){
-      if(preview || dificultad==0 || s<5)return;
+      if(dificultad==0 || s<2)return;
       int old=p.getColor();float oldWidth=p.getStrokeWidth();
-      p.setColor(Color.rgb(118,136,153));p.setStrokeWidth(2.2f);
-      // Intermedio: línea de suelo y textura breve en el dibujo terminado.
-      line(c,45,315,355,315);
-      for(int i=0;i<4;i++)line(c,70+i*74,312,78+i*74,305);
-      if(dificultad==2){
-        // Avanzado: rayado de sombra visible, sin tapar el modelo original.
-        for(int i=0;i<7;i++)line(c,265+i*9,267,249+i*9,290);
-        for(int i=0;i<4;i++)line(c,75+i*12,280,64+i*12,297);
+      p.setColor(preview?ink:coral);p.setStrokeWidth(3.1f);
+      // Las partes adicionales se incorporan en pasos concretos, no sólo al final.
+      switch(n){
+        case 0: // Pez: escamas, branquias, burbujas y agua
+          if(s>=2){line(c,142,133,132,172,143,208);circle(c,105,153,3);}
+          if(s>=3)for(int i=0;i<3;i++)for(int j=0;j<2;j++)line(c,175+i*32,145+j*34,187+i*32,154+j*34,175+i*32,163+j*34);
+          if(s>=4){circle(c,70,85,10);circle(c,51,57,6);}
+          if(s>=5){line(c,35,288,90,280,150,288,215,280,270,288,360,280);if(dificultad==2)for(int i=0;i<5;i++)line(c,130+i*30,215,143+i*30,225);}
+          break;
+        case 1: // Gato: pelaje, patas, manchas
+          if(s>=2){line(c,157,88,169,79);line(c,232,80,244,89);}
+          if(s>=3){line(c,193,90,200,101,207,90);line(c,185,97,192,105);}
+          if(s>=4){line(c,171,261,171,292);line(c,228,261,228,292);}
+          if(s>=5){for(int i=0;i<3;i++){line(c,169+i*15,279,169+i*15,289);line(c,216+i*12,279,216+i*12,289);}if(dificultad==2){line(c,155,217,179,230);line(c,244,218,221,231);}}
+          break;
+        case 2: // Perro: manchas, collar y pelaje
+          if(s>=2){oval(c,157,96,190,126);oval(c,211,96,242,126);}
+          if(s>=3){line(c,163,176,237,176);circle(c,200,181,7);}
+          if(s>=4){oval(c,171,210,201,244);}
+          if(s>=5){line(c,152,287,168,287);line(c,235,287,251,287);if(dificultad==2){line(c,270,237,299,222);line(c,270,245,302,235);}}
+          break;
+        case 3: // Mariposa: nervaduras, simetría y puntos
+          if(s>=2){line(c,195,142,125,106);line(c,205,142,275,106);}
+          if(s>=3){line(c,195,207,135,234);line(c,205,207,265,234);}
+          if(s>=4){circle(c,162,125,9);circle(c,238,125,9);}
+          if(s>=5){for(int i=0;i<3;i++){circle(c,145+i*13,161,3);circle(c,229+i*13,161,3);}if(dificultad==2){line(c,195,180,121,167);line(c,205,180,279,167);}}
+          break;
+        case 4: // Caballo: crin, músculos, detalles
+          if(s>=2){line(c,285,91,266,102,280,109);line(c,281,111,260,123);}
+          if(s>=3){line(c,119,180,151,193);line(c,239,190,269,185);}
+          if(s>=4){line(c,90,158,69,139,58,143);line(c,107,162,84,138);}
+          if(s>=5){line(c,277,117,287,143);line(c,279,125,292,152);if(dificultad==2){line(c,126,209,135,231);line(c,248,212,256,230);}}
+          break;
+        case 5: // Árbol: ramas y hojas orgánicas
+          if(s>=2){line(c,178,181,128,127);line(c,223,178,273,126);}
+          if(s>=3){line(c,178,204,146,163);line(c,221,205,259,164);}
+          if(s>=4)for(int i=0;i<6;i++)circle(c,126+(i%3)*68,78+(i/3)*74,10);
+          if(s>=5){line(c,173,268,149,282);line(c,227,270,247,286);if(dificultad==2)for(int i=0;i<6;i++)line(c,110+i*29,215,100+i*29,229);}
+          break;
+        case 6: // Flor: pétalos internos, nervaduras
+          if(s>=2)for(int i=0;i<8;i++){double a=i*Math.PI/4;line(c,200+(float)Math.cos(a)*32,112+(float)Math.sin(a)*32,200+(float)Math.cos(a)*59,112+(float)Math.sin(a)*59);}
+          if(s>=3)line(c,200,241,160,213);
+          if(s>=4)line(c,200,260,241,221);
+          if(s>=5){for(int i=0;i<7;i++)circle(c,185+(i%3)*10,100+(i/3)*10,2);if(dificultad==2){line(c,185,220,162,213);line(c,216,238,238,221);}}
+          break;
+        case 7: // Montañas: cordillera y sombras
+          if(s>=2){line(c,80,260,145,165,204,263);line(c,215,251,280,136,333,251);}
+          if(s>=3){line(c,145,90,173,167);line(c,280,60,304,140);}
+          if(s>=4){line(c,40,294,78,272,114,294);}
+          if(s>=5){line(c,170,291,218,270,264,291);if(dificultad==2)for(int i=0;i<5;i++)line(c,245+i*12,175,227+i*12,205);}
+          break;
+        case 8: // Paisaje: perspectiva y textura
+          if(s>=2){line(c,36,211,70,193);line(c,326,211,365,188);}
+          if(s>=3){line(c,99,191,71,215);line(c,100,193,129,218);}
+          if(s>=4){line(c,199,308,220,233);line(c,239,308,220,233);}
+          if(s>=5){for(int i=0;i<6;i++)line(c,55+i*49,289,62+i*49,283);if(dificultad==2){line(c,20,248,65,239,104,251);line(c,271,252,329,238,380,251);}}
+          break;
+        case 9: // Casa: tejas, ladrillos, jardín
+          if(s>=2){line(c,110,123,200,55,290,123);line(c,183,234,190,234);}
+          if(s>=3){line(c,117,185,159,185);line(c,245,185,285,185);}
+          if(s>=4){for(int i=0;i<5;i++)line(c,134+i*30,88,148+i*30,101);}
+          if(s>=5){rect(c,72,225,96,258);circle(c,331,244,21);if(dificultad==2){for(int i=0;i<5;i++)line(c,113+i*35,143,125+i*35,143);}}
+          break;
+        case 10: // Auto: ruedas y carrocería detalladas
+          if(s>=2){circle(c,125,246,16);circle(c,277,246,16);}
+          if(s>=3){line(c,210,108,210,144);line(c,158,102,146,141);}
+          if(s>=4){line(c,82,206,116,206);line(c,288,206,318,206);}
+          if(s>=5){line(c,76,228,100,228);line(c,299,228,329,228);if(dificultad==2){line(c,93,165,305,165);line(c,188,176,226,176);}}
+          break;
+        case 11: // Bicicleta: cadena, rayos y engranajes
+          if(s>=2){circle(c,103,227,11);circle(c,299,227,11);}
+          if(s>=3){line(c,161,119,157,111);line(c,198,119,204,112);}
+          if(s>=4){circle(c,218,227,22);line(c,217,247,168,247,103,237);}
+          if(s>=5){line(c,212,210,229,196);if(dificultad==2){circle(c,218,227,6);line(c,242,147,261,161);}}
+          break;
+        case 12: // Cara: cejas, pestañas, sombreado
+          if(s>=2){line(c,150,111,177,104);line(c,221,104,248,111);}
+          if(s>=3){line(c,168,223,200,250,232,223);}
+          if(s>=4){line(c,127,179,151,183);line(c,249,183,273,179);}
+          if(s>=5){for(int i=0;i<3;i++){line(c,158+i*9,126,155+i*9,120);line(c,223+i*9,126,220+i*9,120);}if(dificultad==2){line(c,144,197,168,204);line(c,232,204,256,197);}}
+          break;
+        case 13: // Persona: ropa, articulaciones, accesorios
+          if(s>=2){line(c,173,119,200,146,227,119);}
+          if(s>=3){line(c,177,213,223,213);line(c,175,220,225,220);}
+          if(s>=4){circle(c,123,182,4);circle(c,277,182,4);}
+          if(s>=5){line(c,192,165,208,165);line(c,192,181,208,181);if(dificultad==2){line(c,155,170,171,185);line(c,245,170,229,185);}}
+          break;
+        case 14: // Robot: paneles, cables y mecanismos
+          if(s>=2){rect(c,142,170,258,211);}
+          if(s>=3){circle(c,72,242,8);circle(c,328,242,8);}
+          if(s>=4){rect(c,167,56,233,107);line(c,175,112,225,112);}
+          if(s>=5){for(int i=0;i<4;i++)line(c,153+i*28,235,165+i*28,235);if(dificultad==2){line(c,149,142,166,153);line(c,251,142,234,153);}}
+          break;
+        case 15: // Cohete: placas, motores y espacio
+          if(s>=2){line(c,158,115,242,115);line(c,158,230,242,230);}
+          if(s>=3){line(c,135,239,158,220);line(c,242,220,265,239);}
+          if(s>=4){line(c,184,251,175,283);line(c,216,251,225,283);}
+          if(s>=5){circle(c,333,118,11);circle(c,70,218,8);if(dificultad==2){for(int i=0;i<5;i++)line(c,165+i*15,174,174+i*15,181);}}
+          break;
+        case 16: // Castillo: piedras, ventanas, almenas
+          if(s>=2){line(c,125,144,275,144);line(c,125,165,275,165);}
+          if(s>=3){rect(c,180,172,220,190);line(c,200,203,200,291);}
+          if(s>=4){for(int i=0;i<5;i++)rect(c,131+i*28,121,144+i*28,139);}
+          if(s>=5){for(int i=0;i<5;i++)line(c,133+i*30,205,146+i*30,205);if(dificultad==2){for(int i=0;i<4;i++)line(c,132+i*40,243,147+i*40,243);}}
+          break;
+        case 17: // Dinosaurio: espinas, textura y paisaje
+          if(s>=2){for(int i=0;i<5;i++)line(c,105+i*33,145,120+i*33,119,138+i*33,147);}
+          if(s>=3){line(c,146,246,170,233);line(c,238,245,261,232);}
+          if(s>=4){line(c,302,112,306,120);circle(c,290,96,3);}
+          if(s>=5){for(int i=0;i<6;i++)circle(c,135+i*23,186+(i%2)*19,6);if(dificultad==2){line(c,45,286,75,270,95,286);line(c,280,290,317,263,344,290);}}
+          break;
       }
+      if(dificultad==2 && s>=5){p.setColor(Color.rgb(110,129,149));p.setStrokeWidth(1.7f);for(int i=0;i<7;i++)line(c,265+i*8,267,251+i*8,291);}
       p.setColor(old);p.setStrokeWidth(oldWidth);
     }
     void drawStep(Canvas c,int n,int s){
@@ -245,7 +349,7 @@ public class MainActivity extends Activity {
       int save=c.save();float scale=Math.min(getWidth()/430f,getHeight()/350f);
       c.translate((getWidth()-400*scale)/2,(getHeight()-330*scale)/2);c.scale(scale,scale);
       p.setStrokeWidth(preview?6:4.5f);
-      if(preview){p.setColor(ink);drawStep(c,index,5);}
+      if(preview){p.setColor(ink);drawStep(c,index,5);detallesNivel(c,index,5);}
       else {
         if(paso>0){p.setColor(Color.rgb(195,203,210));drawStep(c,index,paso-1);}
         p.setColor(coral);drawStep(c,index,paso);detallesNivel(c,index,paso);

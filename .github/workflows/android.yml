@@ -50,6 +50,6 @@ jobs:
       - name: Publicar APK
         uses: actions/upload-artifact@v4
         with:
-          name: Sofia-Dibuja-0.2-Android
+          name: Sofia-Dibuja-0.3-Android
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error

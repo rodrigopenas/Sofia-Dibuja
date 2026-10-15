@@ -18,8 +18,8 @@ public class MainActivity extends Activity {
   LinearLayout raiz;
   TextView titulo, instruccion;
   Drawing dibujo;
-  final String[] nombres={"Pez","Gato","Perro","Mariposa","Caballo","Árbol","Flor","Montañas","Paisaje","Casa","Auto","Bicicleta","Cara","Persona","Robot","Cohete","Castillo","Dinosaurio"};
-  final String[] categorias={"Animales","Animales","Animales","Animales","Animales","Naturaleza","Naturaleza","Naturaleza","Naturaleza","Objetos","Objetos","Objetos","Personajes","Personajes","Personajes","Aventura","Aventura","Aventura"};
+  final String[] nombres={"Pez","Gato","Perro","Mariposa","Caballo","Árbol","Flor","Montañas","Paisaje","Casa","Auto","Bicicleta","Cara","Persona","Robot","Cohete","Castillo","Dinosaurio","Búho","Tortuga","Conejo","Elefante","Ballena","Pulpo","Barco","Avión","Tren","Faro","Hongos","Helado","Dragón"};
+  final String[] categorias={"Animales","Animales","Animales","Animales","Animales","Naturaleza","Naturaleza","Naturaleza","Naturaleza","Objetos","Objetos","Objetos","Personajes","Personajes","Personajes","Aventura","Aventura","Aventura","Animales nuevos","Animales nuevos","Animales nuevos","Animales nuevos","Animales nuevos","Animales nuevos","Transportes","Transportes","Transportes","Paisajes nuevos","Paisajes nuevos","Objetos nuevos","Fantasía"};
   final String[][] frases={
     {"Dibujá un óvalo grande en el centro de la hoja.","Agregá una cola triangular a la derecha.","Poné un ojo redondo a la izquierda.","Dibujá una boca pequeña.","Sumá una aleta arriba y otra abajo.","Terminá con líneas en la cola. ¡Muy bien!"},
     {"Dibujá un círculo grande para la cabeza.","Agregá dos orejas triangulares.","Dibujá dos ojos redondos.","Poné una nariz triangular y una boca.","Sumá bigotes a los costados.","Dibujá el cuerpo y una cola curva."},
@@ -38,7 +38,20 @@ public class MainActivity extends Activity {
     {"Dibujá un cuadrado para la cabeza del robot.","Agregá un rectángulo para el cuerpo.","Dibujá dos brazos.","Sumá dos piernas.","Agregá ojos y una boca.","Dibujá botones y una antena."},
     {"Dibujá un rectángulo alto para el cuerpo del cohete.","Agregá una punta triangular.","Dibujá dos ventanas circulares.","Sumá dos aletas laterales.","Dibujá las llamas de los motores.","Agregá estrellas y un planeta de fondo."},
     {"Dibujá un rectángulo ancho para la muralla del castillo.","Agregá dos torres altas a los costados.","Dibujá los techos puntiagudos de las torres.","Sumá una puerta grande con arco.","Agregá ventanas y almenas.","Dibujá piedras, un camino y una bandera."},
-    {"Dibujá un óvalo grande para el cuerpo del dinosaurio.","Agregá un cuello largo que termine en una cabeza.","Dibujá una cola larga y curva.","Sumá cuatro patas fuertes.","Agregá un ojo y una boca sonriente.","Dibujá manchas, pasto y montañas de fondo."}
+    {"Dibujá un óvalo grande para el cuerpo del dinosaurio.","Agregá un cuello largo que termine en una cabeza.","Dibujá una cola larga y curva.","Sumá cuatro patas fuertes.","Agregá un ojo y una boca sonriente.","Dibujá manchas, pasto y montañas de fondo."},
+    {"Dibujá un óvalo vertical para el cuerpo del búho.","Agregá dos orejas puntiagudas.","Dibujá dos ojos grandes.","Sumá un pico triangular.","Agregá las alas a los costados.","Dibujá plumas y una rama donde se posa."},
+    {"Dibujá un óvalo ancho para el caparazón.","Agregá la cabeza redonda a la derecha.","Dibujá cuatro patas cortas.","Sumá una cola triangular.","Agregá un ojo y una sonrisa.","Decorá el caparazón con figuras."},
+    {"Dibujá un óvalo para la cabeza del conejo.","Agregá dos orejas largas.","Dibujá los ojos y la nariz.","Sumá un cuerpo redondeado.","Dibujá las patas y una cola.","Agregá bigotes y pastito."},
+    {"Dibujá un óvalo grande para el cuerpo del elefante.","Agregá una cabeza redonda a la derecha.","Dibujá una trompa larga y curva.","Sumá dos orejas grandes.","Dibujá las cuatro patas.","Agregá ojos, cola y arrugas."},
+    {"Dibujá un óvalo grande y horizontal para la ballena.","Agregá la cola de dos puntas.","Dibujá un ojo pequeño.","Sumá una aleta a un costado.","Dibujá un chorro de agua.","Agregá olas y detalles en el cuerpo."},
+    {"Dibujá un óvalo para la cabeza del pulpo.","Agregá dos tentáculos hacia abajo.","Dibujá otros dos tentáculos curvos.","Sumá cuatro tentáculos más.","Dibujá los ojos y una boca.","Agregá ventosas y burbujas."},
+    {"Dibujá el casco largo del barco.","Agregá un mástil vertical.","Dibujá una vela triangular a la izquierda.","Sumá otra vela a la derecha.","Agregá una bandera arriba.","Dibujá olas, nubes y detalles."},
+    {"Dibujá un cuerpo largo para el avión.","Agregá las alas extendidas.","Dibujá la cola con su aleta.","Sumá las ventanas.","Dibujá dos motores.","Agregá nubes y detalles del fuselaje."},
+    {"Dibujá un rectángulo grande para la locomotora.","Agregá una cabina alta.","Dibujá tres ruedas grandes.","Sumá una chimenea.","Agregá ventanas y luces.","Dibujá humo, rieles y detalles."},
+    {"Dibujá una torre alta para el faro.","Agregá el techo triangular.","Dibujá una ventana arriba.","Sumá la puerta en la base.","Dibujá rayos de luz a los lados.","Agregá rocas y olas."},
+    {"Dibujá un tallo para el primer hongo.","Agregá un sombrero grande arriba.","Dibujá un segundo hongo pequeño.","Sumá un tercer hongo.","Agregá manchas en los sombreros.","Dibujá pasto y piedras."},
+    {"Dibujá un triángulo invertido para el cucurucho.","Agregá una bocha grande de helado.","Dibujá otra bocha encima.","Sumá una cereza arriba.","Decorá el cucurucho con líneas.","Agregá chispas y detalles."},
+    {"Dibujá un óvalo largo para el cuerpo del dragón.","Agregá un cuello y una cabeza alargada.","Dibujá una cola curva.","Sumá cuatro patas con garras.","Agregá alas grandes.","Dibujá cuernos, escamas y humo."}
   };
   @Override public void onCreate(Bundle b) {
     super.onCreate(b);
@@ -72,12 +85,13 @@ public class MainActivity extends Activity {
     settings.setOnClickListener(v->ajustarVoz());
     TextView levelLabel=text("Dificultad",17,ink);levelLabel.setPadding(0,dp(10),0,0);raiz.addView(levelLabel);
     Spinner levels=new Spinner(this);
+    final ArrayList<Drawing> previews=new ArrayList<>();
     String[] opciones={"Inicial · figuras simples","Intermedio · más detalles","Avanzado · dibujo expresivo"};
     levels.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,opciones));
     levels.setSelection(dificultad);
     levels.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener(){
       public void onNothingSelected(android.widget.AdapterView<?> parent){}
-      public void onItemSelected(android.widget.AdapterView<?> parent,View view,int position,long id){dificultad=position;}
+      public void onItemSelected(android.widget.AdapterView<?> parent,View view,int position,long id){dificultad=position;for(Drawing item:previews)item.invalidate();}
     });
     raiz.addView(levels);
     ScrollView scroll=new ScrollView(this);scroll.setFillViewport(false);
@@ -98,7 +112,7 @@ public class MainActivity extends Activity {
       card.setPadding(dp(7),dp(7),dp(7),dp(10));card.setBackground(bg(Color.WHITE,18));
       LinearLayout.LayoutParams cp=new LinearLayout.LayoutParams(0,dp(154),1);
       cp.setMargins(dp(3),dp(4),dp(3),dp(4));row.addView(card,cp);
-      Drawing thumb=new Drawing(this,index,true);card.addView(thumb,new LinearLayout.LayoutParams(-1,dp(105)));
+      Drawing thumb=new Drawing(this,index,true);previews.add(thumb);card.addView(thumb,new LinearLayout.LayoutParams(-1,dp(105)));
       TextView label=text(nombres[i],16,ink);label.setTypeface(null,1);label.setGravity(Gravity.CENTER);card.addView(label);
       card.setOnClickListener(v->{elegido=index;paso=0;leccion();hablar();});
       if(row.getChildCount()==2)row=null;
@@ -301,7 +315,7 @@ public class MainActivity extends Activity {
           if(s>=5){for(int i=0;i<6;i++)circle(c,135+i*23,186+(i%2)*19,6);if(dificultad==2){line(c,45,286,75,270,95,286);line(c,280,290,317,263,344,290);}}
           break;
       }
-      if(dificultad==2 && s>=5){p.setColor(Color.rgb(110,129,149));p.setStrokeWidth(1.7f);for(int i=0;i<7;i++)line(c,265+i*8,267,251+i*8,291);}
+      if(dificultad==2 && s>=3){p.setColor(Color.rgb(110,129,149));p.setStrokeWidth(1.7f);for(int i=0;i<8;i++)line(c,265+i*7,267,251+i*7,291);}
       p.setColor(old);p.setStrokeWidth(oldWidth);
     }
     void drawStep(Canvas c,int n,int s){
@@ -340,6 +354,19 @@ public class MainActivity extends Activity {
         rect(c,100,132,300,292);if(s>=1){rect(c,60,91,114,292);rect(c,286,91,340,292);}if(s>=2){line(c,55,91,87,38,119,91);line(c,281,91,313,38,345,91);}if(s>=3){line(c,169,292,169,235,200,203,231,235,231,292);}if(s>=4){rect(c,74,143,100,177);rect(c,300,143,326,177);line(c,120,132,120,111,143,111,143,132);line(c,257,132,257,111,280,111,280,132);}if(s>=5){line(c,313,38,313,10,347,21,313,31);line(c,30,307,370,307);line(c,135,165,157,165);}break;
       case 17:
         oval(c,95,146,286,247);if(s>=1){line(c,243,159,265,77,312,63,335,89,323,112,278,111);}if(s>=2){line(c,98,177,48,132,20,161,94,223);}if(s>=3){line(c,132,233,127,298,154,298,167,241);line(c,230,235,227,298,254,298,265,229);}if(s>=4){circle(c,309,85,5);line(c,315,105,327,108);}if(s>=5){circle(c,158,180,12);circle(c,212,204,15);line(c,35,307,365,307);line(c,35,108,95,73,145,108);}break;
+      case 18: oval(c,125,70,275,285);if(s>=1){line(c,139,99,123,44,168,78);line(c,232,78,277,44,261,99);}if(s>=2){circle(c,167,146,34);circle(c,233,146,34);}if(s>=3)line(c,188,184,200,207,212,184,188,184);if(s>=4){oval(c,118,174,149,247);oval(c,251,174,282,247);}if(s>=5){for(int i=0;i<5;i++)line(c,160+i*19,238,166+i*19,253);line(c,70,291,330,291);}break;
+      case 19: oval(c,80,122,285,262);if(s>=1)circle(c,318,172,40);if(s>=2){oval(c,120,235,156,288);oval(c,238,235,274,288);}if(s>=3){oval(c,110,112,150,154);line(c,80,199,53,218,83,230);}if(s>=4){circle(c,326,164,5);line(c,320,188,338,188);}if(s>=5){for(int i=0;i<3;i++)line(c,132+i*49,140,160+i*49,183,130+i*49,225);line(c,35,303,365,303);}break;
+      case 20: oval(c,116,71,284,235);if(s>=1){oval(c,143,8,178,115);oval(c,222,8,257,115);}if(s>=2){circle(c,170,149,8);circle(c,230,149,8);circle(c,200,180,8);}if(s>=3)oval(c,130,209,271,295);if(s>=4){oval(c,140,272,182,304);oval(c,225,272,267,304);circle(c,273,259,22);}if(s>=5){line(c,184,181,145,190);line(c,216,181,255,190);line(c,35,312,365,312);}break;
+      case 21: oval(c,62,112,278,250);if(s>=1)circle(c,289,153,62);if(s>=2)line(c,329,175,346,224,325,260,302,247);if(s>=3){oval(c,237,124,271,214);oval(c,323,124,357,214);}if(s>=4){for(int i=0;i<4;i++)rect(c,95+i*47,235,123+i*47,304);}if(s>=5){circle(c,299,140,5);line(c,62,166,34,139,29,185);line(c,35,310,366,310);}break;
+      case 22: oval(c,57,119,315,248);if(s>=1)line(c,300,165,364,117,354,176,367,221,302,207);if(s>=2)circle(c,99,166,6);if(s>=3)line(c,176,242,228,278,248,231);if(s>=4){line(c,179,120,177,80,163,63);line(c,179,80,195,62);}if(s>=5){line(c,30,290,95,278,158,290,222,278,286,290,365,278);line(c,117,195,183,208);}break;
+      case 23: oval(c,120,42,280,172);if(s>=1){line(c,153,158,100,255,140,275);line(c,181,171,163,287,195,295);}if(s>=2){line(c,220,168,241,288,276,273);line(c,255,153,310,251,283,286);}if(s>=3){line(c,171,166,76,223,103,278);line(c,229,165,326,226,298,280);}if(s>=4){circle(c,173,103,11);circle(c,228,103,11);line(c,188,133,200,142,212,133);}if(s>=5){for(int i=0;i<6;i++)circle(c,111+i*32,245+(i%2)*12,5);circle(c,80,80,10);circle(c,316,66,9);}break;
+      case 24: line(c,55,226,345,226,305,286,96,286,55,226);if(s>=1)line(c,202,226,202,63);if(s>=2)line(c,190,83,94,217,190,217,190,83);if(s>=3)line(c,215,91,302,217,215,217,215,91);if(s>=4)line(c,202,63,225,75,202,87);if(s>=5){line(c,35,301,105,292,175,302,245,292,365,301);circle(c,80,59,20);}break;
+      case 25: oval(c,55,120,350,200);if(s>=1){line(c,137,120,180,67,248,120);line(c,145,200,181,252,239,200);}if(s>=2){line(c,305,136,339,92,349,160);line(c,315,179,338,224,351,160);}if(s>=3){for(int i=0;i<5;i++)circle(c,133+i*38,155,9);}if(s>=4){oval(c,140,207,196,244);oval(c,240,207,296,244);}if(s>=5){oval(c,47,44,120,70);oval(c,280,36,360,66);line(c,67,170,112,170);}break;
+      case 26: rect(c,72,132,285,261);if(s>=1)rect(c,228,77,333,260);if(s>=2){circle(c,112,264,28);circle(c,205,264,28);circle(c,295,264,28);}if(s>=3)rect(c,115,91,161,134);if(s>=4)rect(c,170,49,212,132);if(s>=5){for(int i=0;i<3;i++)circle(c,185+i*30,31-i*6,13);line(c,32,307,365,307);line(c,65,318,344,318);}break;
+      case 27: line(c,142,288,169,76,231,76,258,288,142,288);if(s>=1)line(c,164,76,200,27,236,76);if(s>=2)rect(c,176,97,224,139);if(s>=3)rect(c,185,244,215,288);if(s>=4){line(c,170,112,85,86);line(c,230,112,315,86);}if(s>=5){line(c,35,300,88,274,141,299);line(c,259,299,310,275,366,300);}break;
+      case 28: rect(c,118,154,159,287);if(s>=1)oval(c,70,95,207,167);if(s>=2){rect(c,245,195,270,289);oval(c,214,165,301,205);}if(s>=3){rect(c,320,222,338,290);oval(c,295,195,365,232);}if(s>=4){circle(c,114,121,10);circle(c,158,132,12);circle(c,255,181,7);}if(s>=5)line(c,35,294,365,294);break;
+      case 29: line(c,122,175,278,175,200,312,122,175);if(s>=1)circle(c,200,144,61);if(s>=2)circle(c,200,65,47);if(s>=3){line(c,200,20,200,9);circle(c,200,9,9);}if(s>=4){for(int i=0;i<6;i++)line(c,155+i*17,199,164+i*17,214);for(int i=0;i<5;i++)line(c,161+i*16,230,170+i*16,245);}if(s>=5){for(int i=0;i<7;i++)circle(c,160+i*14,142+(i%2)*13,4);}break;
+      case 30: oval(c,88,133,293,237);if(s>=1)line(c,255,151,286,84,328,75,342,107,299,130);if(s>=2)line(c,90,175,32,113,22,172,86,222);if(s>=3){for(int i=0;i<4;i++)line(c,115+i*42,221,111+i*42,290,134+i*42,290);}if(s>=4){line(c,180,145,122,58,191,96,238,46,247,152);}if(s>=5){for(int i=0;i<5;i++)line(c,127+i*29,133,140+i*29,114,155+i*29,137);circle(c,313,96,4);}break;
       case 14:
         rect(c,145,37,255,139);if(s>=1)rect(c,125,142,275,250);if(s>=2){line(c,125,167,72,187,72,242);line(c,275,167,328,187,328,242);}if(s>=3){line(c,161,250,161,307);line(c,239,250,239,307);}if(s>=4){circle(c,175,83,12);circle(c,225,83,12);line(c,175,112,225,112);}if(s>=5){circle(c,180,190,10);circle(c,220,190,10);line(c,200,37,200,13);circle(c,200,12,5);}break;
       }
